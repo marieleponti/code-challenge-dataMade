@@ -11,21 +11,24 @@
       <p>Dealing with some messy or unstructured addresses? We can parse them for you.</p>
       <div class="card card-body bg-light">
         <p><strong>Try it out!</strong> Parse an address in the United States into fields like <code>AddressNumber</code>, <code>StreetName</code> and <code>ZipCode</code>.</p>
-        <form class="form" role="form">
+        <form class="form" role="form" action="/api/parse/" method="get">
           {% csrf_token %}
           <input name="address" type="text" class="form-control" id="address" placeholder="123 Main St. Suite 100 Chicago, IL">
           <button id="submit" type="submit" class="btn btn-success mt-3">Parse!</button>
         </form>
       </div>
       <!-- TODO: Display parsed address components here. -->
-      <div id="address-results" style="display:none">
+      <div id="address-results">
         <h4>Parsing results</h4>
+          {{ form }}
         <p>Address type: <strong><span id="parse-type"></span></strong></p>
         <table class="table table-bordered">
           <thead>
             <tr>
               <th>Address part</th>
+                {{ address }}
               <th>Tag</th>
+                {{ address_type }}
             </tr>
           </thead>
           <tbody>
@@ -38,5 +41,12 @@
 {% endblock %}
 
 {% block extra_js %}
-  <script src="{% static 'js/index.js' %}"></script>
+  <!-- <script src="{% static 'js/index.js' %}">
+  </script> -->
+  
+  <script type="module">
+    import App from "{% static 'js/index.js' %}"
+    new App("{% url 'address-parse' %}")
+  </script>
+  
 {% endblock %}
